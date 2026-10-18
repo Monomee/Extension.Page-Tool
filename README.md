@@ -93,3 +93,9 @@ Muốn dùng **Tóm tắt**, dán [Claude API key](https://console.anthropic.com
 ### Cấu trúc
 
 Xem mục [Project structure](#project-structure) ở trên.
+
+---
+
+## License
+
+[MIT](LICENSE) © 2026 Monomee. Tesseract.js in `lib/` is licensed under Apache-2.0 / Tesseract.js trong `lib/` theo giấy phép Apache-2.0.
