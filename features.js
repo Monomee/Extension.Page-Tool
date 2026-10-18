@@ -7,5 +7,6 @@ const FEATURES = [
   { id: 'fullpage', name: 'Chụp toàn trang', desc: 'Tự cuộn và ghép cả trang thành 1 ảnh. Nhấn Esc hoặc Hủy để dừng.', menu: 'Chụp toàn trang', contexts: PAGE },
   { id: 'translate', name: 'Dịch đoạn bôi đen', desc: 'Bôi đen → chuột phải hoặc phím tắt → bản dịch tiếng Việt hiện ngay.', menu: 'Dịch sang tiếng Việt', contexts: ['selection'] },
   { id: 'summarize', name: 'Tóm tắt đoạn bôi đen', desc: 'Bôi đen → chuột phải → tóm tắt bằng Claude AI (cần API key bên dưới).', menu: 'Tóm tắt bằng AI', contexts: ['selection'] },
+  { id: 'doc_helper', name: 'Hỗ trợ Studocu & Scribd', desc: 'Tải PDF tài liệu gốc, bypass làm mờ, gỡ watermark và xóa cookie trên Studocu & Scribd.', auto: true, def: true },
 ];
 const DEFAULTS = Object.fromEntries(FEATURES.map((f) => [f.id, f.def ?? true]));

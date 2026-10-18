@@ -20,8 +20,48 @@
   input[type=password] { width: 100%; box-sizing: border-box; padding: 6px; font: inherit; margin-top: 3px; }
   a { color: #0969da; font-size: 12px; cursor: pointer; }
   #err { color: #cf222e; font-size: 12px; }
+
+  /* Doc Helper Card - clean GitHub style matching Page Tools */
+  .doc-card { margin-top: 10px; padding: 10px 12px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 8px; }
+  .doc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .doc-head b { font-size: 13px; color: #1f2328; }
+  .doc-badge { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 10px; background: #eaeef2; color: #57606a; }
+  .doc-badge.active { background: #dafbe1; color: #1a7f37; }
+  .doc-status { font-size: 12px; color: #57606a; line-height: 1.4; margin-bottom: 8px; min-height: 18px; word-break: break-word; }
+  .doc-status.error { color: #cf222e; }
+  .speed-card { margin-bottom: 8px; }
+  .doc-speed { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #57606a; margin-bottom: 3px; }
+  .doc-speed strong { color: #1f2328; }
+  input[type="range"]#speedRange { width: 100%; margin: 2px 0; accent-color: #1f883d; cursor: pointer; }
+  .speed-scale { display: flex; justify-content: space-between; font-size: 10px; color: #8c959f; }
+  .doc-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .btn { font: inherit; font-size: 12px; font-weight: 500; border: 1px solid #d0d7de; border-radius: 6px; padding: 5px 10px; cursor: pointer; background: #fff; color: #1f2328; }
+  .btn:hover:not(:disabled) { background: #eaeef2; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn-primary { background: #1f883d; color: #fff; border-color: #1a7f37; }
+  .btn-primary:hover:not(:disabled) { background: #1a7f37; }
 </style>
 <div id="list"></div>
+<div id="docHelperSection" class="doc-card">
+  <div class="doc-head">
+    <b>Studocu &amp; Scribd Helper</b>
+    <span id="siteLabel" class="doc-badge">Đang kiểm tra…</span>
+  </div>
+  <div id="status" class="doc-status">Đang kết nối trang…</div>
+  <div class="speed-card" id="speedCard">
+    <div class="doc-speed">
+      <span>Tốc độ cuộn:</span>
+      <strong id="speedLabel">Vừa</strong>
+    </div>
+    <input id="speedRange" type="range" min="1" max="4" step="1" value="2" aria-label="Tốc độ cuộn">
+    <div class="speed-scale"><span>♩ Chậm</span><span>Rất nhanh ♬</span></div>
+  </div>
+  <div class="doc-actions">
+    <button id="printBtn" class="btn btn-primary" disabled>In PDF</button>
+    <button id="restoreBtn" class="btn" hidden>↺ Khôi phục trang</button>
+    <button id="clearBtn" class="btn" disabled title="Xóa cookie Studocu và tải lại trang">Xóa cookie &amp; tải lại</button>
+  </div>
+</div>
 <label class="key">Claude API key (cho tính năng tóm tắt)
   <input id="key" type="password" placeholder="sk-ant-...">
 </label>
