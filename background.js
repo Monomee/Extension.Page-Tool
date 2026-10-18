@@ -56,6 +56,7 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       return true;
     },
   };
+  if (!handlers[msg.type]) return;
   Promise.resolve()
     .then(handlers[msg.type])
     .then((v) => reply({ ok: true, v }), (e) => reply({ ok: false, error: e.message }));
@@ -63,6 +64,26 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
 });
 
 async function run(action, tab, text) {
+  if (action === 'studocu-print') {
+    await chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ['native-print.css'] }).catch(() => {});
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['native-print.js'] });
+    return chrome.tabs.sendMessage(tab.id, { namespace: 'studocu-native-print', command: 'start', options: { scrollStep: 0.25 } });
+  }
+  if (action === 'scribd-print') {
+    const frames = await chrome.webNavigation.getAllFrames({ tabId: tab.id }).catch(() => []);
+    let targetFrameId = 0;
+    for (const frame of frames) {
+      try {
+        const res = await chrome.tabs.sendMessage(tab.id, { type: 'SNP_PING' }, { frameId: frame.frameId });
+        if (res?.pageCount) { targetFrameId = frame.frameId; break; }
+      } catch {}
+    }
+    const prep = await chrome.tabs.sendMessage(tab.id, { type: 'SNP_START', options: { speedFactor: 1 } }, { frameId: targetFrameId });
+    if (prep?.ok) {
+      return chrome.tabs.sendMessage(tab.id, { type: 'SNP_PRINT' }, { frameId: targetFrameId });
+    }
+    return;
+  }
   await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
   if (action !== 'translate' && action !== 'summarize') return chrome.tabs.sendMessage(tab.id, { type: action });
 
@@ -116,3 +137,71 @@ async function summarize(text) {
   if (!r.ok) throw new Error(j.error?.message || r.status);
   return j.content.map((c) => c.text || '').join('');
 }
+
+/*
+ * Xóa cookie Studocu: quét toàn bộ cookies có chứa domain 'studocu' để reset giới hạn trang
+ */
+async function clearCookiesOldLogic() {
+  const allCookies = [];
+  try {
+    const list = await chrome.cookies.getAll({});
+    if (list) allCookies.push(...list);
+  } catch (e) {
+    console.warn('getAll failed', e);
+  }
+
+  for (const domain of ['studocu.com', 'studocu.vn']) {
+    try {
+      const dCookies = await chrome.cookies.getAll({ domain });
+      if (dCookies) {
+        for (const dc of dCookies) {
+          if (!allCookies.some(c => c.name === dc.name && c.domain === dc.domain && c.path === dc.path)) {
+            allCookies.push(dc);
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  let count = 0;
+  for (const cookie of allCookies) {
+    if (cookie.domain && cookie.domain.includes('studocu')) {
+      let cleanDomain = cookie.domain.startsWith('.')
+        ? cookie.domain.substring(1)
+        : cookie.domain;
+      const protocol = cookie.secure ? 'https:' : 'http:';
+      const url = `${protocol}//${cleanDomain}${cookie.path}`;
+
+      const details = {
+        url: url,
+        name: cookie.name,
+        storeId: cookie.storeId
+      };
+
+      if (cookie.partitionKey) {
+        details.partitionKey = cookie.partitionKey;
+      }
+
+      try {
+        await chrome.cookies.remove(details);
+        count++;
+      } catch (e) {
+        console.warn('Không xóa được cookie:', cookie.name, e);
+      }
+    }
+  }
+
+  return count;
+}
+
+/*
+ * Nhận lệnh từ popup Studocu & Scribd Helper
+ */
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === 'CLEAR_COOKIES_OLD_LOGIC') {
+    clearCookiesOldLogic()
+      .then(count => sendResponse({ ok: true, count }))
+      .catch(error => sendResponse({ ok: false, error: error.message }));
+    return true; // Giữ kênh message bất đồng bộ
+  }
+});

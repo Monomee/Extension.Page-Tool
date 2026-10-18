@@ -3,10 +3,50 @@
   "name": "Page Tools",
   "version": "0.2.0",
   "description": "Bỏ chặn copy, chụp màn hình + ghi chú, OCR, dịch & tóm tắt ngay trên trang.",
-  "permissions": ["scripting", "contextMenus", "storage", "offscreen"],
-  "host_permissions": ["<all_urls>"],
-  "background": { "service_worker": "background.js" },
-  "action": { "default_popup": "popup.html", "default_title": "Page Tools" },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "contextMenus",
+    "storage",
+    "offscreen",
+    "cookies",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "*://*.studocu.com/*",
+    "*://*.studocu.vn/*",
+    "https://scribd.com/*",
+    "https://*.scribd.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Page Tools"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://scribd.com/*",
+        "https://*.scribd.com/*"
+      ],
+      "js": ["scribd-print.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "native-print.js",
+        "native-print.css",
+        "scribd-print.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "commands": {
     "region": { "suggested_key": { "default": "Alt+Shift+S" }, "description": "Chụp vùng màn hình" },
     "ocr": { "suggested_key": { "default": "Alt+Shift+O" }, "description": "Trích chữ vùng chọn" },

@@ -20,6 +20,7 @@ Each feature has its own on/off toggle in the popup.
 | **Full-page screenshot** | Scrolls and stitches the whole page into one image. Press `Esc` or **Cancel** to stop | `Alt+Shift+F` |
 | **Translate selection** | Select text → right-click or shortcut → Vietnamese translation pops up | `Alt+Shift+D` |
 | **Summarize selection** | Select text → right-click → summary by Claude AI (needs an API key) | set your own |
+| **Studocu & Scribd Helper** | Open document on Studocu/Scribd → export native PDF, bypass blur, remove watermark, clear cookies | — |
 
 You can also run every feature from the right-click menu (under **Page Tools**) or with the ▶ button in the popup. Change shortcuts at `chrome://extensions/shortcuts`.
 
@@ -39,6 +40,12 @@ To use **Summarize**, paste your [Claude API key](https://console.anthropic.com/
 - Full-page capture only scrolls the main page. Pages that scroll inside their own container (Gmail, Notion) capture one screen. Sticky headers show only at the top of the image.
 - Chrome does not allow extensions on `chrome://` pages or the Chrome Web Store.
 
+### Disclaimer
+
+- This project is for educational and personal use only.
+- Please respect the copyright of document authors and the terms of service of Studocu and Scribd.
+- The extension may stop working at any time if Studocu or Scribd changes their interface.
+
 ### Project structure
 
 ```
@@ -50,6 +57,8 @@ unblock.js         copy / right-click unblocker (injected on every page when ena
 offscreen.*        hidden page that keeps the Tesseract OCR worker alive
 popup.*            toggles + API key
 editor.*           screenshot editor
+native-print.*     Studocu native print: scroll, measure & layout
+scribd-print.js    Scribd document viewer detection & native print
 lib/               Tesseract.js 5.1.1 (Apache-2.0)
 ```
 
@@ -57,7 +66,7 @@ lib/               Tesseract.js 5.1.1 (Apache-2.0)
 
 ## Tiếng Việt
 
-Extension Chrome (Manifest V3) giúp lấy nội dung trên trang web ngay tại chỗ, không cần sang trang khác: bỏ chặn copy, chụp màn hình kèm ghi chú, trích chữ (OCR), dịch và tóm tắt.
+Extension Chrome (Manifest V3) giúp lấy nội dung trên trang web ngay tại chỗ, không cần sang trang khác: bỏ chặn copy, chụp màn hình kèm ghi chú, trích chữ (OCR), dịch, tóm tắt và hỗ trợ tải PDF Studocu & Scribd.
 
 ### Chức năng
 
@@ -71,6 +80,7 @@ Mỗi chức năng có công tắc bật/tắt riêng trong popup.
 | **Chụp toàn trang** | Tự cuộn và ghép cả trang thành 1 ảnh. Nhấn `Esc` hoặc **Hủy** để dừng | `Alt+Shift+F` |
 | **Dịch đoạn bôi đen** | Bôi đen → chuột phải hoặc phím tắt → bản dịch tiếng Việt hiện ngay | `Alt+Shift+D` |
 | **Tóm tắt đoạn bôi đen** | Bôi đen → chuột phải → tóm tắt bằng Claude AI (cần API key) | tự đặt |
+| **Hỗ trợ Studocu & Scribd** | Mở tài liệu Studocu/Scribd → xuất PDF gốc, bypass mờ, gỡ watermark, xóa cookie | — |
 
 Mọi chức năng cũng chạy được từ menu chuột phải (mục **Page Tools**) hoặc nút ▶ trong popup. Đổi phím tắt tại `chrome://extensions/shortcuts`.
 
@@ -89,6 +99,12 @@ Muốn dùng **Tóm tắt**, dán [Claude API key](https://console.anthropic.com
 - OCR (Tesseract.js) chạy offline, nhưng lần đầu sẽ tải dữ liệu ngôn ngữ (vài MB) từ jsDelivr.
 - Chụp toàn trang chỉ cuộn trang chính. Trang cuộn trong khung riêng (Gmail, Notion) chỉ chụp được 1 màn hình. Thanh menu dính chỉ hiện ở đầu ảnh.
 - Chrome không cho extension chạy trên trang `chrome://` và Chrome Web Store.
+
+### Lưu ý
+
+- Dự án chỉ phục vụ mục đích học tập và dùng cá nhân.
+- Hãy tôn trọng bản quyền của tác giả tài liệu và điều khoản của Studocu, Scribd.
+- Extension có thể ngừng hoạt động bất cứ lúc nào khi Studocu, Scribd đổi giao diện.
 
 ### Cấu trúc
 
