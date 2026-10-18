@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Page Tools – Ảnh chụp</title>
+<style>
+  body { font: 14px system-ui, sans-serif; margin: 0; background: #eaeef2; }
+  #bar { position: sticky; top: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; background: #fff; border-bottom: 1px solid #d0d7de; z-index: 1; }
+  button, select { font: inherit; padding: 5px 10px; border: 1px solid #d0d7de; border-radius: 6px; background: #f6f8fa; cursor: pointer; }
+  button.on { background: #0969da; color: #fff; border-color: #0969da; }
+  #wrap { padding: 16px; display: flex; gap: 16px; align-items: flex-start; }
+  #main { flex: 1; min-width: 0; display: flex; justify-content: center; }
+  canvas { max-width: 100%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.2); cursor: crosshair; }
+  #side { width: 340px; flex-shrink: 0; display: none; position: sticky; top: 64px; }
+  textarea { width: 100%; height: calc(100vh - 140px); box-sizing: border-box; font: inherit; padding: 8px; resize: none; }
+  #status { color: #57606a; font-size: 12px; }
+</style>
+<div id="bar">
+  <button data-tool="pen" class="on">✏️ Bút</button>
+  <button data-tool="rect">▭ Khung</button>
+  <button data-tool="text">T Chữ</button>
+  <input id="color" type="color" value="#e5484d">
+  <button id="undo">↶ Hoàn tác</button>
+  <span style="flex:1"></span>
+  <button id="copy">📋 Copy ảnh</button>
+  <button id="save">💾 Tải PNG</button>
+  <select id="lang"><option value="vie+eng">Việt + Anh</option><option value="eng">Anh</option></select>
+  <button id="ocr">🔤 Trích chữ</button>
+  <span id="status"></span>
+</div>
+<div id="wrap">
+  <div id="main"><canvas id="c"></canvas></div>
+  <div id="side">
+    <textarea id="text"></textarea>
+    <div id="bar2" style="display:flex;gap:6px;margin-top:6px">
+      <button id="copyText">📋 Copy chữ</button>
+      <button id="tr">🌐 Dịch</button>
+      <button id="sum">✨ Tóm tắt</button>
+    </div>
+  </div>
+</div>
+<script src="editor.js"></script>

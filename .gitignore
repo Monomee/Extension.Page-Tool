@@ -1,0 +1,8 @@
+node_modules/
+*.zip
+*.crx
+*.pem
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

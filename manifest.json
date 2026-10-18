@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Page Tools",
+  "version": "0.2.0",
+  "description": "Bỏ chặn copy, chụp màn hình + ghi chú, OCR, dịch & tóm tắt ngay trên trang.",
+  "permissions": ["scripting", "contextMenus", "storage", "offscreen"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "Page Tools" },
+  "commands": {
+    "region": { "suggested_key": { "default": "Alt+Shift+S" }, "description": "Chụp vùng màn hình" },
+    "ocr": { "suggested_key": { "default": "Alt+Shift+O" }, "description": "Trích chữ vùng chọn" },
+    "fullpage": { "suggested_key": { "default": "Alt+Shift+F" }, "description": "Chụp toàn trang" },
+    "translate": { "suggested_key": { "default": "Alt+Shift+D" }, "description": "Dịch đoạn bôi đen" },
+    "summarize": { "description": "Tóm tắt đoạn bôi đen" }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
